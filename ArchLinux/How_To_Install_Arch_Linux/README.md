@@ -155,6 +155,7 @@ passwd 使用者名稱
 
 #### 設定使用者的 sudo 權限
 ```
+# 開啟 sudoers - sudo 的設定檔
 sudo nano /etc/sudoers
 # 找到這個部份
 ##
@@ -165,31 +166,42 @@ sudo nano /etc/sudoers
 ```
 
 #### NetworkManager 安裝 (選用)
+> 選用，使用有線網路者可以不用安裝，使用
+Wi-Fi 網路者建議安裝（除非你會設定 netctl）
 ```
+# 安裝 NetworkManager
 sudo pacman -Sy networkmanager
+# 啟用 NetworkManager
 sudo systemctl enable NetworkManager
 ```
 
 #### 桌面環境安裝 (選用)
+> xorg 是每個桌面環境的底層基礎，少了
+xorg 將無法啟動桌面環境。
+
 ```
 # 首先必須安裝 xorg 環境
 sudo pacman -Sy xorg
-# 若使用 Intel 內顯，需要多安裝這個驅動
+# 若使用 Intel 內顯，需多安裝這個驅動
 sudo pacman -Sy xf86-video-intel
 ```
 
 ##### KDE
 ```
+# 安裝 plasma（KDE 底層框架）與 kde-applications、sddm（KDE 推薦的登入管理器）
 sudo pacman -Sy plasma kde-applications sddm
+# 啟用 sddm 登入管理器
 sudo systemctl enable sddm
 ```
+> kde-applications 是 KDE 的所有軟體，如果
+你懂 KDE 每個程式的用途，你可以選擇手動選擇安裝。
 
 #### 安裝輸入法
 ##### fcitx
 ```
 # 此處安裝 chewing 新酷音
 sudo pacman -Sy fcitx-im fcitx-chewing
-# 進入自己的使用者
+# 進入自己的使用者，以進行接下來的步驟
 su 使用者名稱
 # 讓系統辨識到 fcitx 輸入法
 echo "GTK_IM_MODULE=fcitx">~/.pam_environment
@@ -197,14 +209,21 @@ echo "QT_IM_MODULE=fcitx">>~/.pam_environment
 echo "XMODIFIERS=@im=fcitx">>~/.pam_environment
 exit
 ```
+> 只能使用 .pam_environment，這是英文版 ArchWiki
+提供的方法。.xprofile 或者其他在 KDE 等其他桌面環境
+可能不起作用。
+> 請安裝 fcitx-im，不要單獨安裝 fcitx，因為 fcitx-im 
+包含了給 GTK 與
 
 #### 重新開機
 ```
+# 離開 chroot
 exit
+# 離開 LiveCD，進入你自己打造的系統吧！
 reboot
 ```
 
-### 感謝
+### 製作者
 製作者：pan93412 <pan93412@gmail.com>
 
 **請勿刪除作者訊息，也請留下原始 Github 庫連結。**
