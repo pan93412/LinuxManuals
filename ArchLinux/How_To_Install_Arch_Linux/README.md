@@ -17,7 +17,7 @@
   - [32 位元](https://www.archlinux32.org/download/)
 - 一隻 **至少有 1GB 的隨身碟** 、SD 卡或者是其他可開機裝置
 
-## 開始安裝
+## ISO 準備
 ### 下載 Arch Linux ISO
 進入網址後往下滑，會看到 HTTP Direct Downloads，
 從這一堆節點裡面找一個離你地區最近的國家位址。
@@ -47,6 +47,55 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 > 你知道 macOS 要怎麼把 ISO 刷入
 USB 嗎？歡迎發 PR 補全這個部份！
 
+## 開始安裝
+當你進入 Arch Linux LiveCD 後，選擇第一個選項開機。
+
+### 磁碟分割與配置
+#### 分割磁碟
+輸入 `parted` 開始分割磁碟。輸入 `help` 得知
+可以使用的指令。
+
+其實比較建議在安裝前就處理好。
+
+#### 格式化磁碟
+先輸入 `lsblk -f` 查詢自己要格式化的磁碟，
+再輸入 `mkfs.ext4 /dev/(磁碟)` 來格式化磁碟。
+> Tips: 跟 mkfs 很像的功能為 fsck，可以幫你檢查磁碟的錯誤與問題。
+
+### LiveCD 網路與時間設定
+```
+# 檢查你網路的最好方法就是 ping 一台主機。
+ping www.google.com
+# 如果 ping 不通，重插網路線
+# 避免使用 Wi-Fi 連線。
+```
+```
+# 接著把目前的時間與網路對時，防止憑證等等的錯誤。
+timedatectl set-ntp true
+# 看看現在的時間是否正確
+timedatectl
+```
+```
+# 掛載分割區到 /mnt，這樣才能進行接下來的步驟
+# /mnt 是系統預留給你掛載分割區用的路徑。
+# 假設磁碟分割區為 /dev/sda1
+mount /dev/sda1 /mnt
+```
+```
+# 安裝基本系統，就可以進入基本系統囉！
+# 普通版（不需要 Wi-Fi 的使用者）
+pacstrap /mnt base base-devel
+# Wi-Fi 版
+pacstrap /mnt base base-devel iw dialog wpa_supplicant wpa_actiond dhcpcd netctl
+# 依照你的需求，任選一個你要的指令。
+# 接著告訴系統磁碟與分割區的位置
+genfstab -U /mnt >/mnt/etc/fstab
+# 最後進入基本系統
+arch-chroot /mnt
+# 開始處理基本系統吧！
+```
+
 ### 感謝
 製作者：pan93412 <pan93412@gmail.com>
+
 **請勿刪除作者訊息，也請留下原始 Github 庫連結。**
