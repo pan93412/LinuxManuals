@@ -213,7 +213,35 @@ exit
 提供的方法。.xprofile 或者其他在 KDE 等其他桌面環境
 可能不起作用。
 > 請安裝 fcitx-im，不要單獨安裝 fcitx，因為 fcitx-im 
-包含了給 GTK 與
+包含了給 GTK 與 QT 的輸入法 lib。
+
+#### 安裝常用軟體 (選用)
+- ntfs-3g：讀取與寫入 NTFS 格式的磁碟
+- firefox：Firefox 網頁瀏覽器
+  - firefox-i18n-zh-tw：Firefox 正體中文語系包
+
+#### 啟用 testing 與 kde-unstable 庫 (選用)
+```
+# 打開 /etc/pacman.conf
+sudo nano /etc/pacman.conf
+# 移除掉以下的註解：
+# [testing]
+# Include = /etc/pacman.d/mirrorlist
+```
+```
+# 增加 kde-unstable 軟體庫
+[testing]
+Include = /etc/pacman.d/mirrorlist
+# 的上面增加： (空一行)
+[kde-unstable]
+Include = /etc/pacman.d/mirrorlist
+# 結果應為：
+[kde-unstable]
+Include = /etc/pacman.d/mirrorlist
+[testing]
+Include = /etc/pacman.d/mirrorlist
+```
+[其他 Arch 的軟體庫](https://wiki.archlinux.org/index.php/official_repositories)
 
 #### 重新開機
 ```
@@ -227,3 +255,5 @@ reboot
 製作者：pan93412 <pan93412@gmail.com>
 
 **請勿刪除作者訊息，也請留下原始 Github 庫連結。**
+
+回報問題請透過 Github 上的 Issues。
