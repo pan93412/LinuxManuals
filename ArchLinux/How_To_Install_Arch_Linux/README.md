@@ -94,6 +94,10 @@ genfstab -U /mnt >/mnt/etc/fstab
 arch-chroot /mnt
 # 開始處理基本系統吧！
 ```
+> pacstrap 是 chroot 與 pacman 的組合。
+> genfstab -U 代表告訴磁碟與分割區的方式為 UUID，UUID 比較不會發生什麼相容性問題
+
+### 基本系統設定
 
 ### 感謝
 製作者：pan93412 <pan93412@gmail.com>
