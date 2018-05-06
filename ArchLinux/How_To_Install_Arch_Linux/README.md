@@ -241,7 +241,8 @@ Include = /etc/pacman.d/mirrorlist
 [testing]
 Include = /etc/pacman.d/mirrorlist
 ```
-[其他 Arch 的軟體庫](https://wiki.archlinux.org/index.php/official_repositories)
+> Arch 的軟體庫當然不只這些，請參閱：
+[Arch 的軟體庫列表](https://wiki.archlinux.org/index.php/official_repositories)
 
 #### 重新開機
 ```
