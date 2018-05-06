@@ -238,6 +238,7 @@ Include = /etc/pacman.d/mirrorlist
 # 結果應為：
 [kde-unstable]
 Include = /etc/pacman.d/mirrorlist
+
 [testing]
 Include = /etc/pacman.d/mirrorlist
 ```
