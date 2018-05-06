@@ -1,4 +1,4 @@
-# 1-1：如何安裝 Arch Linux？
+# 如何安裝 Arch Linux？
 ## 說明
 有些人會以為 Arch Linux 十分困難、超級難安裝、
 非常恐怖，但事實沒有這麼恐怖，頂多比 Debian
@@ -99,7 +99,23 @@ arch-chroot /mnt
 > genfstab -U 代表告訴磁碟與分割區的方式為 UUID，UUID 比較不會發生什麼相容性問題
 
 ### 基本系統設定
+#### 時間設定
+```
+# 設定時區
+# 例如台灣的時區設定檔就在 /usr/share/zoneinfo/Asia/Taiwan
+# /usr/share/zoneinfo/洲/地區
+ln -sf /usr/share/zoneinfo/Asia/Taiwan /etc/localtime
+# 將系統時間設定為 UTC
+hwclock -w --utc
+```
+#### 語系設定
 
+#### 主機名稱
+```
+# 主機名稱可以亂取，但是不要取中文與有特殊符號
+# 的主機名稱。建議取英文字母為第一個字。
+echo "想要的主機名稱" >/etc/hostname
+```
 ### 感謝
 製作者：pan93412 <pan93412@gmail.com>
 
