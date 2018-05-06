@@ -171,6 +171,13 @@ sudo systemctl enable NetworkManager
 ```
 
 #### 桌面環境安裝 (選用)
+```
+# 首先必須安裝 xorg 環境
+sudo pacman -Sy xorg
+# 若使用 Intel 內顯，需要多安裝這個驅動
+sudo pacman -Sy xf86-video-intel
+```
+
 ##### KDE
 ```
 sudo pacman -Sy plasma kde-applications sddm
