@@ -184,16 +184,17 @@ sudo systemctl enable sddm
 sudo pacman -Sy fcitx-im fcitx-chewing
 # 進入自己的使用者
 su 使用者名稱
-# 建立 .pam_environment 檔案
-touch ~/.pam_environment
-# 打開 .pam_environment 檔案
-sudo nano ~/.pam_environment
-# 增加以下文字
+# 讓系統辨識到 fcitx 輸入法
+echo "GTK_IM_MODULE=fcitx">~/.pam_environment
+echo "QT_IM_MODULE=fcitx">>~/.pam_environment
+echo "XMODIFIERS=@im=fcitx">>~/.pam_environment
+exit
 ```
+
+#### 重新開機
 ```
-GTK_IM_MODULE=fcitx
-QT_IM_MODULE=fcitx
-XMODIFIERS=@im=fcitx
+exit
+reboot
 ```
 
 ### 感謝
