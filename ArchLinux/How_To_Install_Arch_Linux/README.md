@@ -108,7 +108,23 @@ ln -sf /usr/share/zoneinfo/Asia/Taiwan /etc/localtime
 # 將系統時間設定為 UTC
 hwclock -w --utc
 ```
+
 #### 語系設定
+```
+# 打開 /etc/locale.gen
+nano /etc/locale.gen
+# 解除註解以下：
+# en_US.UTF-8 UTF-8
+# zh_TW.UTF-8 UTF-8
+# zh_CN.UTF-8 UTF-8
+# 儲存後執行以下指令
+locale-gen
+```
+```
+# 輸入以下指令，將預設語系設定為正體中文。
+echo 'LANG=zh_TW.UTF-8'>/etc/locale.conf
+echo 'LANGUAGE=zh_TW'>/etc/locale.conf
+```
 
 #### 主機名稱
 ```
@@ -116,6 +132,70 @@ hwclock -w --utc
 # 的主機名稱。建議取英文字母為第一個字。
 echo "想要的主機名稱" >/etc/hostname
 ```
+
+#### GRUB 安裝
+```
+# 安裝 GRUB 主程式
+pacman -Sy grub
+# 安裝 GRUB 開機管理程式
+# 假設磁碟編號為 /dev/sda
+# 可透過查詢 lsblk 找到自己的磁碟編號
+grub-install /dev/sda --recheck
+# 建立 GRUB 設定檔
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+#### 建立使用者
+```
+# 建立使用者
+useradd -m -s /bin/bash 使用者名稱
+# 設定使用者密碼
+passwd 使用者名稱
+```
+
+#### 設定使用者的 sudo 權限
+```
+sudo nano /etc/sudoers
+# 找到這個部份
+##
+## User privilege specification
+##
+# 在 root ALL=(ALL) ALL 後面增加
+# 使用者名稱 ALL=(ALL) ALL
+```
+
+#### NetworkManager 安裝 (選用)
+```
+sudo pacman -Sy networkmanager
+sudo systemctl enable NetworkManager
+```
+
+#### 桌面環境安裝 (選用)
+##### KDE
+```
+sudo pacman -Sy plasma kde-applications sddm
+sudo systemctl enable sddm
+```
+
+#### 安裝輸入法
+##### fcitx
+```
+# 此處安裝 chewing 新酷音
+sudo pacman -Sy fcitx-im fcitx-chewing
+# 進入自己的使用者
+su 使用者名稱
+# 建立 .pam_environment 檔案
+touch ~/.pam_environment
+# 打開 .pam_environment 檔案
+sudo nano ~/.pam_environment
+# 增加以下文字
+```
+```
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+```
+
 ### 感謝
 製作者：pan93412 <pan93412@gmail.com>
 
