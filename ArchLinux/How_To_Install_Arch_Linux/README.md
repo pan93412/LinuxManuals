@@ -263,17 +263,15 @@ reboot
 ```
 # 進入你的使用者
 su (使用者名稱)
-# 首先安裝 zsh 與 git
-sudo pacman -S zsh git
+# 首先安裝 zsh 與 git、curl
+sudo pacman -S zsh git curl
 # 接著下載 oh-my-zsh 的 sh 檔案
 # 這可以改善 zsh 的使用體驗
 # 這裡先把下載到的檔案儲存到 ohmyz.sh
 curl -L http://install.ohmyz.sh >ohmyz.sh
-# 然後設定 zsh 為預設終端器
-chsh -s /usr/bin/zsh
 # 接著執行剛下載的 ohmyz.sh，
 # 開始安裝 oh-my-zsh 吧！
-bash ohmyz.ssh
+sh ohmyz.sh
 # 到這裡你應該進入 zsh 了，
 # 而接下來我們來把 zsh 弄漂亮點：
 # 打開 .zshrc (zsh 的設定檔)
@@ -292,10 +290,6 @@ exit
 exit
 ```
 
-```
-# zsh 一鍵安裝、設定腳本
-curl -L https://raw.githubusercontent.com/pan93412/LinuxManuals/master/ArchLinux/Extras/zshinst.sh | bash
-```
 ### 製作者
 製作者：pan93412 <pan93412@gmail.com>
 
