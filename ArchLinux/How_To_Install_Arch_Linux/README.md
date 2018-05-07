@@ -185,6 +185,8 @@ sudo pacman -Sy xorg
 # 若使用 Intel 內顯，需多安裝這個驅動
 sudo pacman -Sy xf86-video-intel
 ```
+> 你也可以選擇改安裝比較精簡的 `xorg-server`，
+但這比較建議給進階使用者。
 
 ##### KDE
 ```
@@ -251,6 +253,43 @@ Include = /etc/pacman.d/mirrorlist
 exit
 # 離開 LiveCD，進入你自己打造的系統吧！
 reboot
+```
+
+### 進階使用
+這不適合給剛入門 Arch 的使用者使用，
+除非你想要創造一些不一樣的體驗。
+
+#### 把 bash 改成 zsh 吧！
+```
+# 進入你的使用者
+su (使用者名稱)
+# 首先安裝 zsh 與 git
+sudo pacman -S zsh git
+# 接著下載 oh-my-zsh 的 sh 檔案
+# 這可以改善 zsh 的使用體驗
+# 這裡先把下載到的檔案儲存到 ohmyz.sh
+curl -L http://install.ohmyz.sh >ohmyz.sh
+# 然後設定 zsh 為預設終端器
+chsh -s /usr/bin/zsh
+# 接著執行剛下載的 ohmyz.sh，
+# 開始安裝 oh-my-zsh 吧！
+bash ohmyz.ssh
+# 到這裡你應該進入 zsh 了，
+# 而接下來我們來把 zsh 弄漂亮點：
+# 打開 .zshrc (zsh 的設定檔)
+# Tips: ~/ 指家目錄
+nano ~/.zshrc
+# 編輯這行
+ZSH_THEME="(主題名稱)"
+# 上面的備註已經告訴你，你可以從
+# oh-my-zsh 的官方 Git 庫找到
+# 許多好看的主題，而我自己比較喜歡 agnoster.
+ZSH_THEME="agnoster"
+# 儲存！
+# 離開 zsh
+exit
+# 回到 chroot
+exit
 ```
 
 ### 製作者
