@@ -292,6 +292,10 @@ exit
 exit
 ```
 
+```
+# zsh 一鍵安裝、設定腳本
+curl -L https://raw.githubusercontent.com/pan93412/LinuxManuals/master/ArchLinux/Extras/zshinst.sh | bash
+```
 ### 製作者
 製作者：pan93412 <pan93412@gmail.com>
 
