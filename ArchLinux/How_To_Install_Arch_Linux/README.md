@@ -291,6 +291,7 @@ exit
 ```
 
 ### 讓 bash 更漂亮 -- bash-it
+![bash with bash-it 截圖](https://i.imgur.com/4xVJMyJ.png)
 ```
 # 登入自己的使用者
 su (使用者名稱)
