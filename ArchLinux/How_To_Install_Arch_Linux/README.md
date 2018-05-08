@@ -290,6 +290,49 @@ exit
 exit
 ```
 
+### 讓 bash 更漂亮 -- bash-it
+```
+# 登入自己的使用者
+su (使用者名稱)
+# 首先下載 git
+sudo pacman -S git
+# 然後複製 bash-it 的軟體庫
+git clone --depth=1 http://github.com/Bash-it/bash-it ~/.bash_it
+# 安裝 bash-it
+# -s (silent) 不提示安裝模式
+bash ~/.bash_it/install.sh -s
+# 測試吧！
+bash
+
+# 我自己還蠻喜歡 powerline 這個主題，那就來設定吧！
+# 主題列表
+ls ~/.bash_it/themes
+# 設定主題
+nano .bashrc
+# export BASH_IT_THEMES='主題名稱'
+# 設定成 powerline 後，還需要下載字體。
+# 複製 powerline fonts 軟體庫
+git clone --depth=1 http://github.com/powerline/fonts ~/.plfont
+# 安裝字體
+bash ~/.plfont/install.sh
+# 看看新主題吧！
+bash
+```
+
+```
+# 懶人指令
+# 需先安裝 curl！
+pacman -S curl
+# 然後執行以下指令～
+curl -L https://raw.githubusercontent.com/pan93412/LinuxManuals/master/ArchLinux/Extras/bash-it.sh >bash-it.sh
+# 這樣你就可以下載到 bash-it.sh，看看 bash-it.sh 的說明吧！
+bash bash-it.sh
+# 安裝 bash-it
+bash bash-it.sh install
+# 移除 bash-it
+bash bash-it remove
+```
+
 ### 製作者
 製作者：pan93412 <pan93412@gmail.com>
 

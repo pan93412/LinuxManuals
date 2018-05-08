@@ -1,4 +1,7 @@
 #!/bin/bash
+# author: pan93412
+# usage: bash bash-it.sh [install | remove]
+
 function help {
     echo "      BASH IT 安裝程序"
     echo " * 安裝說明 * "
@@ -7,6 +10,7 @@ function help {
     echo " 的社區維護的 Bash 擴充，包含了"
     echo " 主題等功能。"
     echo " 使用：$0 [install | remove]"
+    echo " 作者：pan93412"
     }
 
 function install {
