@@ -221,8 +221,28 @@ exit
 - ntfs-3g：讀取與寫入 NTFS 格式的磁碟
 - firefox：Firefox 網頁瀏覽器
   - firefox-i18n-zh-tw：Firefox 正體中文語系包
+- htop：系統監視器
+  - 可以用終端器直接看到系統目前的狀況。
 
-#### 啟用 testing 與 kde-unstable 庫 (選用)
+#### 重新開機
+```
+# 離開 chroot
+exit
+# 離開 LiveCD，進入你自己打造的系統吧！
+reboot
+```
+
+#### 接下來？
+- 去看看 ArchWiki，這可以讓你受益良多。[→ 連結](https://wiki.archlinux.org)
+- 看看 ArchWiki 的 pacman 教學。
+- 大多數程式的說明文件可以透過 `man (程式名稱)` 取得，
+而指令使用方式可以透過 `(程式名稱) --help` 取得。
+
+### 進階使用
+這不適合給剛入門 Arch 的使用者使用，
+除非你想要創造一些不一樣的體驗。
+
+#### 啟用 testing 與 kde-unstable 軟體庫
 ```
 # 打開 /etc/pacman.conf
 sudo nano /etc/pacman.conf
@@ -246,24 +266,6 @@ Include = /etc/pacman.d/mirrorlist
 ```
 > Arch 的軟體庫當然不只這些，請參閱：
 [Arch 的軟體庫列表](https://wiki.archlinux.org/index.php/official_repositories)
-
-#### 重新開機
-```
-# 離開 chroot
-exit
-# 離開 LiveCD，進入你自己打造的系統吧！
-reboot
-```
-
-#### 接下來？
-- 去看看 ArchWiki，這可以讓你受益良多。[→ 連結](https://wiki.archlinux.org)
-- 看看 ArchWiki 的 pacman 教學。
-- 大多數程式的說明文件可以透過 `man (程式名稱)` 取得，
-而指令使用方式可以透過 `(程式名稱) --help` 取得。
-
-### 進階使用
-這不適合給剛入門 Arch 的使用者使用，
-除非你想要創造一些不一樣的體驗。
 
 #### 把 bash 改成 zsh 吧！
 ```
