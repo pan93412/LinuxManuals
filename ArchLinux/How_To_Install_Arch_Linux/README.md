@@ -255,6 +255,12 @@ exit
 reboot
 ```
 
+#### 接下來？
+- 去看看 ArchWiki，這可以讓你受益良多。[→ 連結](https://wiki.archlinux.org)
+- 看看 ArchWiki 的 pacman 教學。
+- 大多數程式的說明文件可以透過 `man (程式名稱)` 取得，
+而指令使用方式可以透過 `(程式名稱) --help` 取得。
+
 ### 進階使用
 這不適合給剛入門 Arch 的使用者使用，
 除非你想要創造一些不一樣的體驗。
@@ -332,6 +338,23 @@ bash bash-it.sh
 bash bash-it.sh install
 # 移除 bash-it
 bash bash-it remove
+```
+
+### 讓 pacman 多點顏色
+```
+# 開啟 pacman 設定檔案
+sudo nano /etc/pacman.conf
+# 找到 # Misc options
+# 將下面的
+# Color
+# 改成
+Color
+# 儲存後就可以看到 pacman 多了不少顏色。
+```
+
+```
+# 懶人指令
+sudo sed -i 's/^#Color$/Color/g' /etc/pacman.conf
 ```
 
 ### 製作者
