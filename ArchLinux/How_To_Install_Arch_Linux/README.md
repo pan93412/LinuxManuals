@@ -221,6 +221,7 @@ exit
 - ntfs-3g：讀取與寫入 NTFS 格式的磁碟
 - firefox：Firefox 網頁瀏覽器
   - firefox-i18n-zh-tw：Firefox 正體中文語系包
+- chromium：Chrome 的開源版本 - Chromium
 - htop：系統監視器
   - 可以用終端器直接看到系統目前的狀況。
 
