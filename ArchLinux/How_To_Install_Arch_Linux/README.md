@@ -8,10 +8,11 @@
 可以感受到安裝 Arch Linux 的自訂性與 DIY 的
 成就感。
 
-這是一本面向 Arch Linux 初心者的說明書。
+這是一本面向 Arch Linux 初心者的安裝說明書。
 
 ## 準備
 -  **有一定的電腦、Linux 基礎**
+  - 有一定的英文基礎，看 ArchWiki 必須！
 - Arch Linux 映像檔案
   - [**64 位元（大多數電腦的架構）**](https://www.archlinux.org/download/)
   - [32 位元](https://www.archlinux32.org/download/)
@@ -44,8 +45,13 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 ```
 
 #### macOS
-> 你知道 macOS 要怎麼把 ISO 刷入
-USB 嗎？歡迎發 PR 補全這個部份！
+使用 DD 指令即可。
+```
+# 先使用 lsblk 確定自己的 USB 位置
+lsblk
+# 再使用 dd 指令刷入 USB 的磁碟區（不是分割區，通常只有三碼 - e.g sda, sdc ...）
+dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
+```
 
 ## 開始安裝
 當你進入 Arch Linux LiveCD 後，選擇第一個選項開機。
@@ -60,7 +66,8 @@ USB 嗎？歡迎發 PR 補全這個部份！
 #### 格式化磁碟
 先輸入 `lsblk -f` 查詢自己要格式化的磁碟，
 再輸入 `mkfs.ext4 /dev/(磁碟)` 來格式化磁碟。
-> Tips: 跟 mkfs 很像的功能為 fsck，可以幫你檢查磁碟的錯誤與問題。
+> Tips: 跟 mkfs 名字很像的功能為 fsck，
+可以幫你檢查磁碟的錯誤與問題。
 
 ### LiveCD 網路與時間設定
 ```
@@ -78,15 +85,20 @@ timedatectl
 ```
 # 掛載分割區到 /mnt，這樣才能進行接下來的步驟
 # /mnt 是系統預留給你掛載分割區用的路徑。
-# 假設磁碟分割區為 /dev/sda1
-mount /dev/sda1 /mnt
+# 假設磁碟分割區為 /dev/sda2
+mount /dev/sda2 /mnt
+# UEFI 使用者請繼續執行下面的步驟：
+# 建立 /mnt/boot 資料夾以掛載 UEFI 開機分區
+mkdir /mnt/boot
+# 掛載 UEFI 開機分區 (通常為 /dev/sda1)
+mount /dev/sda1 /mnt/boot
 ```
 ```
 # 安裝基本系統，就可以進入基本系統囉！
 # 普通版（不需要 Wi-Fi 的使用者）
 pacstrap /mnt base base-devel
 # Wi-Fi 版
-pacstrap /mnt base base-devel iw dialog wpa_supplicant wpa_actiond dhcpcd netctl
+pacstrap /mnt base base-devel iw dialog wpa_supplicant wpa_actiond dhcpcd
 # 依照你的需求，任選一個你要的指令。
 # 接著告訴系統磁碟與分割區的位置
 genfstab -U /mnt >/mnt/etc/fstab
@@ -96,7 +108,7 @@ arch-chroot /mnt
 ```
 > pacstrap 是 chroot 與 pacman 的組合。
 
-> genfstab -U 代表告訴磁碟與分割區的方式為 UUID，UUID 比較不會發生什麼相容性問題
+> genfstab -U 代表告訴磁碟與分割區的方式為 UUID，而 UUID 比較不會發生什麼相容性問題
 
 ### 基本系統設定
 #### 時間設定
@@ -134,6 +146,11 @@ echo "想要的主機名稱" >/etc/hostname
 ```
 
 #### GRUB 安裝
+> 假如你打算 Windows + Linux 雙系統，請多安裝
+os-prober，並且掛載要加入 GRUB 開機選項的
+磁碟區。（尚未完成 #TODO）
+
+BIOS + MBR 環境：
 ```
 # 安裝 GRUB 主程式
 pacman -Sy grub
@@ -144,6 +161,21 @@ grub-install /dev/sda --recheck
 # 建立 GRUB 設定檔
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
+
+UEFI + **GPT** 環境：
+
+> 此方法只支援 GPT 分區！
+
+```
+# 安裝 GRUB 主程式，與 UEFI 所需工具。
+pacman -Sy grub efibootmgr dosfstools
+# 安裝 GRUB 開機管理程式
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub --recheck
+# 建立 GRUB 設定檔
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+外部連結：[ArchWiki 的 GRUB 條目](https://wiki.archlinux.org/index.php/GRUB)
 
 #### 建立使用者
 ```
@@ -164,6 +196,8 @@ sudo nano /etc/sudoers
 # 在 root ALL=(ALL) ALL 後面增加
 # 使用者名稱 ALL=(ALL) ALL
 ```
+
+外部連結：[ArchWiki 的 sudo 條目](https://wiki.archlinux.org/index.php/Sudo)
 
 #### NetworkManager 安裝 (選用)
 > 選用，使用有線網路者可以不用安裝，使用
@@ -188,6 +222,13 @@ sudo pacman -Sy xf86-video-intel
 > 你也可以選擇改安裝比較精簡的 `xorg-server`，
 但這比較建議給進階使用者。
 
+> 假如你是 Nvidia 卡：如果是單 Nvidia 顯卡，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA)；
+如果是 Intel + Nvidia 或其他，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA_Optimus)
+
+> 假如你是 AMD (ATI) 卡：[參閱此處](https://wiki.archlinux.org/index.php/ATI)
+
+外部連結：[ArchWiki 的 Xorg 條目](https://wiki.archlinux.org/index.php/Xorg)
+
 ##### KDE
 ```
 # 安裝 plasma（KDE 底層框架）與 kde-applications、sddm（KDE 推薦的登入管理器）
@@ -197,6 +238,8 @@ sudo systemctl enable sddm
 ```
 > kde-applications 是 KDE 的所有軟體，如果
 你懂 KDE 每個程式的用途，你可以選擇手動選擇安裝。
+
+外部連結：[ArchWiki 的 KDE 條目](https://wiki.archlinux.org/index.php/KDE)
 
 #### 安裝輸入法
 ##### fcitx
@@ -212,10 +255,13 @@ echo "XMODIFIERS=@im=fcitx">>~/.pam_environment
 exit
 ```
 > 只能使用 .pam_environment，這是英文版 ArchWiki
-提供的方法。.xprofile 或者其他在 KDE 等其他桌面環境
+提供的方法。.xprofile 或者其他在 KDE 或大多數桌面環境
 可能不起作用。
+
 > 請安裝 fcitx-im，不要單獨安裝 fcitx，因為 fcitx-im 
 包含了給 GTK 與 QT 的輸入法 lib。
+
+外部連結：[ArchWiki 的 fcitx 條目](https://wiki.archlinux.org/index.php/Fcitx)
 
 #### 安裝常用軟體 (選用)
 - ntfs-3g：讀取與寫入 NTFS 格式的磁碟
@@ -235,7 +281,7 @@ reboot
 
 #### 接下來？
 - 去看看 ArchWiki，這可以讓你受益良多。[→ 連結](https://wiki.archlinux.org)
-- 看看 ArchWiki 的 pacman 教學。
+- 看看 ArchWiki 的 [pacman 教學](https://wiki.archlinux.org/index.php/Pacman_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))。
 - 大多數程式的說明文件可以透過 `man (程式名稱)` 取得，
 而指令使用方式可以透過 `(程式名稱) --help` 取得。
 
