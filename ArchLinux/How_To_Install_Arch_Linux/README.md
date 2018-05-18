@@ -1,12 +1,12 @@
 # 如何安裝 Arch Linux？
 ## 說明
 有些人會以為 Arch Linux 十分困難、超級難安裝、
-非常恐怖，但事實沒有這麼恐怖，頂多比 Debian
+非常恐怖，\
+但事實沒有這麼恐怖，頂多比 Debian
 的安裝程式還要複雜一點點而已。
 
-本教學會引導你學會安裝 Arch Linux，在其中你
-可以感受到安裝 Arch Linux 的自訂性與 DIY 的
-成就感。
+本教學會引導你學會安裝 Arch Linux，在其中你\
+可以感受到安裝 Arch Linux 的自訂性與 DIY 的成就感。
 
 這是一本面向 Arch Linux 初心者的安裝說明書。
 
@@ -20,7 +20,7 @@
 
 ## ISO 準備
 ### 下載 Arch Linux ISO
-進入網址後往下滑，會看到 HTTP Direct Downloads，
+進入網址後往下滑，會看到 HTTP Direct Downloads，\
 從這一堆節點裡面找一個離你地區最近的國家位址。
 
 當你下載完成之後，接下來是將得到的 ISO 刷入隨身碟。
@@ -30,8 +30,8 @@
 先下載 Rufus [（點這裡下載！！！）](https://rufus.akeo.ie)，
 找到 Download 後按下去最新版 (e.g Rufus 2.18 (945 KB))
 
-打開之後選擇好自己的裝置、選擇好 ISO 映像檔案、
-把「使用映像檔建立開機片」旁邊的「ISO 映像」改成「DD 映像」，
+打開之後選擇好自己的裝置、選擇好 ISO 映像檔案、\
+把「使用映像檔建立開機片」旁邊的「ISO 映像」改成「DD 映像」，\
 之後即可按下「開始」刷入 Arch Linux ISO。
 > DD 映像比較快、也比較能保證自己的安裝隨身碟是完整的。
 
@@ -53,6 +53,9 @@ lsblk
 dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 ```
 
+---
+
+
 ## 開始安裝
 當你進入 Arch Linux LiveCD 後，選擇第一個選項開機。
 
@@ -63,166 +66,133 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 
 其實比較建議在安裝前就處理好。
 
-#### 格式化磁碟
-先輸入 `lsblk -f` 查詢自己要格式化的磁碟，
-再輸入 `mkfs.ext4 /dev/(磁碟)` 來格式化磁碟。
-> Tips: 跟 mkfs 名字很像的功能為 fsck，
-可以幫你檢查磁碟的錯誤與問題。
+#### 格式化分割區
+1. 查詢自己想要格式化的分割區：`lsblk -f`
+2. 格式化分割區：`mkfs.ext4 /dev/sd(磁碟編號)(分割區編號)`\
+   例如 mkfs.ext4 /dev/sda1
+
+> Tips: 跟 mkfs 名字很像的功能為 fsck，\
+  可以幫你檢查磁碟的錯誤與問題。
+
+> Tips: 也可格式化成其他檔案系統類型，\
+  例如 btrfs 就是 `mkfs.btrfs`、xfs 就是 `mkfs.xfs`
+
+#### 掛載分割區
+掛載分割區至 /mnt，開始安裝系統：`mount /dev/sda2 /mnt`
+
+如果是 UEFI 使用者，還需要掛載 EFI 開機分區。
+
+1. 建立 /mnt/boot 資料夾，以掛載 EFI 開機分區至此處：`mkdir /mnt/boot`
+2. 掛載 EFI 開機分區 (通常為 /dev/sda1)：`mount /dev/sda1 /mnt/boot`
 
 ### LiveCD 網路與時間設定
-```
-# 檢查你網路的最好方法就是 ping 一台主機。
-ping www.google.com
-# 如果 ping 不通，重插網路線
-# 避免使用 Wi-Fi 連線。
-```
-```
-# 接著把目前的時間與網路對時，防止憑證等等的錯誤。
-timedatectl set-ntp true
-# 看看現在的時間是否正確
-timedatectl
-```
-```
-# 掛載分割區到 /mnt，這樣才能進行接下來的步驟
-# /mnt 是系統預留給你掛載分割區用的路徑。
-# 假設磁碟分割區為 /dev/sda2
-mount /dev/sda2 /mnt
-# UEFI 使用者請繼續執行下面的步驟：
-# 建立 /mnt/boot 資料夾以掛載 UEFI 開機分區
-mkdir /mnt/boot
-# 掛載 UEFI 開機分區 (通常為 /dev/sda1)
-mount /dev/sda1 /mnt/boot
-```
-```
-# 安裝基本系統，就可以進入基本系統囉！
-# 普通版（不需要 Wi-Fi 的使用者）
-pacstrap /mnt base base-devel
-# Wi-Fi 版
-pacstrap /mnt base base-devel iw dialog wpa_supplicant wpa_actiond dhcpcd
-# 依照你的需求，任選一個你要的指令。
-# 接著告訴系統磁碟與分割區的位置
-genfstab -U /mnt >/mnt/etc/fstab
-# 最後進入基本系統
-arch-chroot /mnt
-# 開始處理基本系統吧！
-```
+請避免使用 Wi-Fi 連線！
+
+1. 透過 ping 主機檢查網路：`ping www.archlinux.org`，
+假如 ping 失敗，重插網路線。
+2. 將本機時間與網路時間對時，防止憑證過期等錯誤：`timedatectl set-ntp true`。\
+檢查目前時間：`timedatectl`
+
+### 安裝基本系統
+1. 安裝基礎系統：`pacstrap /mnt base base-devel`
+2. 假如有 Wi-Fi 硬體，需要多執行這條指令：`pacstrap /mnt iw dialog wpa_supplicant wpa_actiond dhcpcd`
+3. 為系統生成 fstab，讓系統準確的知道每個分割區的位置：\
+   `genfstab -U /mnt >/mnt/etc/fstab`
+4. 進入基礎系統：`arch-chroot /mnt`
+
 > pacstrap 是 chroot 與 pacman 的組合。
 
-> genfstab -U 代表告訴磁碟與分割區的方式為 UUID，而 UUID 比較不會發生什麼相容性問題
+> genfstab -U 代表告訴磁碟與分割區的方式為 UUID，\
+而 UUID 比較不會發生什麼相容性問題
 
 ### 基本系統設定
 #### 時間設定
+1. 設定時區
 ```
-# 設定時區
 # 例如台灣的時區設定檔就在 /usr/share/zoneinfo/Asia/Taiwan
 # /usr/share/zoneinfo/洲/地區
 ln -sf /usr/share/zoneinfo/Asia/Taiwan /etc/localtime
-# 將系統時間設定為 UTC
-hwclock -w --utc
 ```
+2. 將系統時間設定為 UTC：`hwclock -w --utc`
 
 #### 語系設定
+1. 開啟 /etc/locale.gen：`nano /etc/locale.gen`
+2. 解除註解 (#) 以下：
 ```
-# 打開 /etc/locale.gen
-nano /etc/locale.gen
-# 解除註解以下：
 # en_US.UTF-8 UTF-8
 # zh_TW.UTF-8 UTF-8
 # zh_CN.UTF-8 UTF-8
-# 儲存後執行以下指令
-locale-gen
 ```
+3. 儲存檔案 (Ctrl-O)，生成語言：`locale-gen`
+4. 開啟 /etc/locale.conf：`nano /etc/locale.conf`
+5. 增加以下內容，將預設語系設定為正體中文。
 ```
-# 輸入以下指令，將預設語系設定為正體中文。
-echo 'LANG=zh_TW.UTF-8'>/etc/locale.conf
-echo 'LANGUAGE=zh_TW'>/etc/locale.conf
+LANG=zh_TW.UTF-8
+LANGUAGE=zh_TW
 ```
 
 #### 主機名稱
-```
-# 主機名稱可以亂取，但是不要取中文與有特殊符號
-# 的主機名稱。建議取英文字母為第一個字。
-echo "想要的主機名稱" >/etc/hostname
-```
+主機名稱取名規則：可亂取、但不要取中文、也不要取有特殊\
+符號的主機名稱。且建議取英文字母為第一個字！設定指令：\
+`echo "想要的主機名稱" >/etc/hostname`
 
 #### GRUB 安裝
-> 假如你打算 Windows + Linux 雙系統，請多安裝
-os-prober，並且掛載要加入 GRUB 開機選項的
-磁碟區。（尚未完成 #TODO）
+> 假如你打算 Windows + Linux 雙系統，請多安裝 os-prober，\
+待進入桌面環境後再輸入 `grub-mkconfig` 就能取得其他系統的開機項。[待測試]
 
 BIOS + MBR 環境：
-```
-# 安裝 GRUB 主程式
-pacman -Sy grub
-# 安裝 GRUB 開機管理程式
-# 假設磁碟編號為 /dev/sda
-# 可透過查詢 lsblk 找到自己的磁碟編號
-grub-install /dev/sda --recheck
-# 建立 GRUB 設定檔
-grub-mkconfig -o /boot/grub/grub.cfg
-```
+1. 安裝 grub 主程式：`pacman -Sy grub`
+2. 安裝 GRUB 開機管理程式，假設磁碟編號為 /dev/sda\
+   可以透過輸入 lsblk 找到自己的磁碟編號。\
+   `grub-install /dev/sda --recheck`
+3. 建立 GRUB 設定檔：`grub-mkconfig -o /boot/grub/grub.cfg`
 
 UEFI + **GPT** 環境：
-
 > 此方法只支援 GPT 分區！
 
-```
-# 安裝 GRUB 主程式，與 UEFI 所需工具。
-pacman -Sy grub efibootmgr dosfstools
-# 安裝 GRUB 開機管理程式
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub --recheck
-# 建立 GRUB 設定檔
-grub-mkconfig -o /boot/grub/grub.cfg
-```
+1. 安裝 GRUB 主程式與 UEFI 開機控制系統：`pacman -Sy grub efibootmgr dosfstools`
+2. 安裝 GRUB 開機管理程式：`grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub --recheck`
+3. 建立 GRUB 設定檔：`grub-mkconfig -o /boot/grub/grub.cfg`
 
 外部連結：[ArchWiki 的 GRUB 條目](https://wiki.archlinux.org/index.php/GRUB)
 
-#### 建立使用者
-```
-# 建立使用者
-useradd -m -s /bin/bash 使用者名稱
-# 設定使用者密碼
-passwd 使用者名稱
-```
+#### 使用者建立
+1. 建立使用者：`useradd -m -s /bin/bash (使用者名稱)`\
+   -m 建立 (使用者名稱) 的家目錄\
+   -s 設定 (使用者名稱) 的 Shell
+2. 設定使用者密碼：`passwd (使用者名稱)`
 
 #### 設定使用者的 sudo 權限
+1. 開啟 sudoers - sudo 的設定檔：`sudo nano /etc/sudoers`
+2. 找到以下部份：
 ```
-# 開啟 sudoers - sudo 的設定檔
-sudo nano /etc/sudoers
-# 找到這個部份
 ##
 ## User privilege specification
 ##
-# 在 root ALL=(ALL) ALL 後面增加
-# 使用者名稱 ALL=(ALL) ALL
 ```
+3. 在 `root ALL=(ALL) ALL` 的下一行增加\
+   `(使用者名稱) ALL=(ALL) ALL` 即可。
 
 外部連結：[ArchWiki 的 sudo 條目](https://wiki.archlinux.org/index.php/Sudo)
 
 #### NetworkManager 安裝 (選用)
 > 選用，使用有線網路者可以不用安裝，使用
-Wi-Fi 網路者建議安裝（除非你會設定 netctl）
-```
-# 安裝 NetworkManager
-sudo pacman -Sy networkmanager
-# 啟用 NetworkManager
-sudo systemctl enable NetworkManager
-```
+Wi-Fi 網路者建議安裝。
+1. 安裝 NetworkManager：`sudo pacman -Sy networkmanager`
+2. 啟用 NetworkManager：`sudo systemctl enable NetworkManager`
 
 #### 桌面環境安裝 (選用)
 > xorg 是每個桌面環境的底層基礎，少了
 xorg 將無法啟動桌面環境。
 
-```
-# 首先必須安裝 xorg 環境
-sudo pacman -Sy xorg
-# 若使用 Intel 內顯，需多安裝這個驅動
-sudo pacman -Sy xf86-video-intel
-```
+安裝 xorg 環境：`sudo pacman -Sy xorg`\
+若使用 Intel 內顯，需多安裝這個驅動：`
+sudo pacman -Sy xf86-video-intel`
 > 你也可以選擇改安裝比較精簡的 `xorg-server`，
 但這比較建議給進階使用者。
 
-> 假如你是 Nvidia 卡：如果是單 Nvidia 顯卡，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA)；
+> 假如你是 Nvidia 卡：
+>> 如果是單 Nvidia 顯卡，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA)\
 如果是 Intel + Nvidia 或其他，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA_Optimus)
 
 > 假如你是 AMD (ATI) 卡：[參閱此處](https://wiki.archlinux.org/index.php/ATI)
@@ -243,19 +213,21 @@ sudo systemctl enable sddm
 
 #### 安裝輸入法
 ##### fcitx
+1. 安裝 fcitx 框架與 chewing 新酷音：`sudo pacman -Sy fcitx-im fcitx-chewing`
+2. 進入自己的使用者，以進行接下來的步驟：`su 使用者名稱`
+3. 建立 ~/.pam_environment 檔案：`touch ~/.pam_environment`
+4. 開啟 ~/.pam_environment 檔案：`nano ~/.pam_environment`
+5. 增加下列幾行至 ~/.pam_environment
 ```
-# 此處安裝 chewing 新酷音
-sudo pacman -Sy fcitx-im fcitx-chewing
-# 進入自己的使用者，以進行接下來的步驟
-su 使用者名稱
-# 讓系統辨識到 fcitx 輸入法
-echo "GTK_IM_MODULE=fcitx">~/.pam_environment
-echo "QT_IM_MODULE=fcitx">>~/.pam_environment
-echo "XMODIFIERS=@im=fcitx">>~/.pam_environment
-exit
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
 ```
+6. 儲存檔案，輸入 exit 回到 root 使用者
+
 > 只能使用 .pam_environment，這是英文版 ArchWiki
-提供的方法。.xprofile 或者其他在 KDE 或大多數桌面環境
+提供的方法。
+>> .xprofile 或者其他在 KDE 或大多數桌面環境
 可能不起作用。
 
 > 請安裝 fcitx-im，不要單獨安裝 fcitx，因為 fcitx-im 
@@ -270,14 +242,11 @@ exit
 - chromium：Chrome 的開源版本 - Chromium
 - htop：系統監視器
   - 可以用終端器直接看到系統目前的狀況。
+- reflector：Mirror 排名工具
 
 #### 重新開機
-```
-# 離開 chroot
-exit
-# 離開 LiveCD，進入你自己打造的系統吧！
-reboot
-```
+1. 離開 chroot：`exit`
+2. 離開 LiveCD，進入你自己打造的系統吧：`reboot`
 
 #### 接下來？
 - 去看看 ArchWiki，這可以讓你受益良多。[→ 連結](https://wiki.archlinux.org)
@@ -285,103 +254,87 @@ reboot
 - 大多數程式的說明文件可以透過 `man (程式名稱)` 取得，
 而指令使用方式可以透過 `(程式名稱) --help` 取得。
 
+---
+
+### 系統最佳化
+Arch Linux 比較常用的最佳化。
+
+#### 解決關機過久的問題
+1. 開啟 `/etc/systemd/user.conf` 檔案。（須 root 權限）
+2. 取消註解 (#) 以下兩行：
+```
+# DefaultTimeoutStartSec=180s
+# DefaultTimeoutStopSec=180s
+```
+3. 將以上兩行的 180s 改成 1s，未來碰到程式卡住無法關機的問題，systemd 也就只會等待一秒鐘就強制結束這個程式了。
+> 可以把 1s 改成其他數字，例如 5s 就是五秒、10s 就是十秒…
+4. 儲存檔案，執行 `systemctl daemon-reload` 即設定生效。
+---
+
 ### 進階使用
-這不適合給剛入門 Arch 的使用者使用，
+這不適合給剛入門 Arch 的使用者使用，\
 除非你想要創造一些不一樣的體驗。
 
-#### 啟用 testing 與 kde-unstable 軟體庫
+#### 啟用 testing 軟體庫
+1. 打開 /etc/pacman.conf\
+`sudo nano /etc/pacman.conf`
+2. 移除掉以下的註解
 ```
-# 打開 /etc/pacman.conf
-sudo nano /etc/pacman.conf
-# 移除掉以下的註解：
 # [testing]
 # Include = /etc/pacman.d/mirrorlist
 ```
-```
-# 增加 kde-unstable 軟體庫
-[testing]
-Include = /etc/pacman.d/mirrorlist
-# 的上面增加： (空一行)
-[kde-unstable]
-Include = /etc/pacman.d/mirrorlist
-# 結果應為：
-[kde-unstable]
-Include = /etc/pacman.d/mirrorlist
 
-[testing]
-Include = /etc/pacman.d/mirrorlist
-```
-> Arch 的軟體庫當然不只這些，請參閱：
+> Arch 的軟體庫還有許多，請參閱：
 [Arch 的軟體庫列表](https://wiki.archlinux.org/index.php/official_repositories)
 
 #### 把 bash 改成 zsh 吧！
-```
-# 進入你的使用者
-su (使用者名稱)
-# 首先安裝 zsh 與 git、curl
-sudo pacman -S zsh git curl
-# 接著下載 oh-my-zsh 的 sh 檔案
-# 這可以改善 zsh 的使用體驗
-# 這裡先把下載到的檔案儲存到 ohmyz.sh
-curl -L http://install.ohmyz.sh >ohmyz.sh
-# 接著執行剛下載的 ohmyz.sh，
-# 開始安裝 oh-my-zsh 吧！
-sh ohmyz.sh
-# 到這裡你應該進入 zsh 了，
-# 而接下來我們來把 zsh 弄漂亮點：
-# 打開 .zshrc (zsh 的設定檔)
-# Tips: ~/ 指家目錄
+1. 開啟終端
+2. 安裝 zsh、git 與 curl
+3. 下載 oh-my-zsh 的 sh 檔案以改善 zsh 使用體驗，
+此處將下載到的檔案儲存到 `ohmyz.sh`\
+`curl -L -o ohmyz.sh http://install.ohmyz.sh`
+4. 執行 ohmyz.sh，開始安裝 oh-my-zsh：`sh ohmyz.sh`
+
+進入 zsh 後，你可以把你的 zsh 佈置的更漂亮些：
+1. 開啟家目錄的 .zshrc - zsh 設定檔
 nano ~/.zshrc
-# 編輯這行
-ZSH_THEME="(主題名稱)"
-# 上面的備註已經告訴你，你可以從
-# oh-my-zsh 的官方 Git 庫找到
-# 許多好看的主題，而我自己比較喜歡 agnoster.
-ZSH_THEME="agnoster"
-# 儲存！
-# 離開 zsh
-exit
-# 回到 chroot
-exit
-```
+2. 將 `ZSH_THEME="(主題名稱)"` 中的 `(主題名稱)` 改成自己想要的主題名稱。
+> 可以在 oh-my-zsh 的官方 Git 庫找到許多好看的主題。\
+以 agnoster 為例： `ZSH_THEME="agnoster"`
+3. Ctrl - O 儲存檔案，再輸入 `zsh` 即可。
+
 
 ### 讓 bash 更漂亮 -- bash-it
 ![bash with bash-it 截圖](https://i.imgur.com/4xVJMyJ.png)
-```
-# 登入自己的使用者
-su (使用者名稱)
-# 首先下載 git
-sudo pacman -S git
-# 然後複製 bash-it 的軟體庫
-git clone --depth=1 http://github.com/Bash-it/bash-it ~/.bash_it
-# 安裝 bash-it
-# -s (silent) 不提示安裝模式
-bash ~/.bash_it/install.sh -s
-# 測試吧！
-bash
+1. 下載 git
+2. 複製 bash-it 的 Git 庫：\
+`git clone --depth=1 http://github.com/Bash-it/bash-it ~/.bash_it`
+3. 安裝 bash-it (-s 安靜安裝)：`bash ~/.bash_it/install.sh -s`
+4. 測試
 
-# 我自己還蠻喜歡 powerline 這個主題，那就來設定吧！
-# 主題列表
-ls ~/.bash_it/themes
-# 設定主題
-nano .bashrc
-# export BASH_IT_THEMES='主題名稱'
-# 設定成 powerline 後，還需要下載字體。
-# 複製 powerline fonts 軟體庫
-git clone --depth=1 http://github.com/powerline/fonts ~/.plfont
-# 安裝字體
-bash ~/.plfont/install.sh
-# 看看新主題吧！
-bash
-```
+設定主題：
 
+1. 查看想要套用的主題名稱：`ls ~/.bash_it/themes`
+2. 打開 .bashrc (bash 設定檔)
+3. 把 `export BASH_IT_THEMES='(主題名稱)'` 中的 `(主題名稱)` 改成\
+自己想要的主題名稱。
+
+假如你安裝 Powerline，還需要安裝字體。
+
+1. 複製 powerline fonts 的 Git 庫：\
+`git clone --depth=1 http://github.com/powerline/fonts ~/.plfont`
+2. 安裝字體：`bash ~/.plfont/install.sh`
+3. 重新開啟 bash 套用主題：`bash`
+
+快速安裝腳本：
+1. 安裝 curl
+2. 執行如下指令…
 ```
-# 懶人指令
-# 需先安裝 curl！
-pacman -S curl
-# 然後執行以下指令～
-curl -L https://raw.githubusercontent.com/pan93412/LinuxManuals/master/ArchLinux/Extras/bash-it.sh >bash-it.sh
-# 這樣你就可以下載到 bash-it.sh，看看 bash-it.sh 的說明吧！
+curl -L -o bash-it.sh https://raw.githubusercontent.com/pan93412/LinuxManuals/master/ArchLinux/Extras/bash-it.sh
+```
+3. 以下為 bash-it.sh 的使用方式
+```
+# bash-it.sh 的說明
 bash bash-it.sh
 # 安裝 bash-it
 bash bash-it.sh install
@@ -390,16 +343,9 @@ bash bash-it remove
 ```
 
 ### 讓 pacman 多點顏色
-```
-# 開啟 pacman 設定檔案
-sudo nano /etc/pacman.conf
-# 找到 # Misc options
-# 將下面的
-# Color
-# 改成
-Color
-# 儲存後就可以看到 pacman 多了不少顏色。
-```
+1. 開啟 pacman 設定檔：`/etc/pacman.conf`
+2. 找到 # Misc options
+3. 取消註解 (#) `# Color` 即可發現到 pacman 多了不少色彩
 
 ```
 # 懶人指令
