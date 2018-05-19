@@ -27,7 +27,7 @@
 
 ### 刷入 Arch Linux ISO
 #### Windows
-先下載 Rufus [（點這裡下載！！！）](https://rufus.akeo.ie)，
+先下載 Rufus [（點這裡下載！）](https://rufus.akeo.ie)，
 找到 Download 後按下去最新版 (e.g Rufus 2.18 (945 KB))
 
 打開之後選擇好自己的裝置、選擇好 ISO 映像檔案、\
@@ -141,7 +141,7 @@ LANGUAGE=zh_TW
 待進入桌面環境後再輸入 `grub-mkconfig` 就能取得其他系統的開機項。[待測試]
 
 BIOS + MBR 環境：
-1. 安裝 grub 主程式：`pacman -Sy grub`
+1. 安裝 GRUB 主程式：`pacman -Sy grub`
 2. 安裝 GRUB 開機管理程式，假設磁碟編號為 /dev/sda\
    可以透過輸入 lsblk 找到自己的磁碟編號。\
    `grub-install /dev/sda --recheck`
@@ -191,9 +191,9 @@ sudo pacman -Sy xf86-video-intel`
 > 你也可以選擇改安裝比較精簡的 `xorg-server`，
 但這比較建議給進階使用者。
 
-> 假如你是 Nvidia 卡：
->> 如果是單 Nvidia 顯卡，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA)\
-如果是 Intel + Nvidia 或其他，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA_Optimus)
+> 假如你是 NVIDIA 卡：
+>> 如果是單 NVIDIA 顯卡，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA)\
+如果是 Intel + NVIDIA 或其他，[參閱此處](https://wiki.archlinux.org/index.php/NVIDIA_Optimus)
 
 > 假如你是 AMD (ATI) 卡：[參閱此處](https://wiki.archlinux.org/index.php/ATI)
 
@@ -355,6 +355,6 @@ sudo sed -i 's/^#Color$/Color/g' /etc/pacman.conf
 ### 製作者
 製作者：pan93412 <pan93412@gmail.com>
 
-**請勿刪除作者訊息，也請留下原始 Github 庫連結。**
+**請勿刪除作者訊息，也請留下原始 GitHub 庫連結。**
 
-回報問題請透過 Github 上的 Issues。
+回報問題請透過 GitHub 上的 Issues。
