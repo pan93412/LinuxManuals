@@ -199,6 +199,11 @@ sudo pacman -Sy xf86-video-intel`
 
 外部連結：[ArchWiki 的 Xorg 條目](https://wiki.archlinux.org/index.php/Xorg)
 
+##### 字體
+- noto-fonts-cjk：思源黑體 (中日韓字體) (推薦)
+- noto-fonts-emoji：思源黑體 (Emoji) (推薦)
+- wqy-microhei
+- wqy-zenhei
 ##### KDE
 ```
 # 安裝 plasma（KDE 底層框架）與 kde-applications、sddm（KDE 推薦的登入管理器）
@@ -214,16 +219,17 @@ sudo systemctl enable sddm
 #### 安裝輸入法
 ##### fcitx
 1. 安裝 fcitx 框架與 chewing 新酷音：`sudo pacman -Sy fcitx-im fcitx-chewing`
-2. 進入自己的使用者，以進行接下來的步驟：`su 使用者名稱`
-3. 建立 ~/.pam_environment 檔案：`touch ~/.pam_environment`
-4. 開啟 ~/.pam_environment 檔案：`nano ~/.pam_environment`
-5. 增加下列幾行至 ~/.pam_environment
+2. 假如使用 KDE，安裝 fcitx 設定工具：`sudo pacman -Sy kcm-fcitx`
+3. 進入自己的使用者，以進行接下來的步驟：`su 使用者名稱`
+4. 建立 ~/.pam_environment 檔案：`touch ~/.pam_environment`
+5. 開啟 ~/.pam_environment 檔案：`nano ~/.pam_environment`
+6. 增加下列幾行至 ~/.pam_environment
 ```
 GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 ```
-6. 儲存檔案，輸入 exit 回到 root 使用者
+7. 儲存檔案，輸入 exit 回到 root 使用者
 
 > 只能使用 .pam_environment，這是英文版 ArchWiki
 提供的方法。
