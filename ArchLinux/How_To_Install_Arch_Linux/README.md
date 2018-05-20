@@ -94,8 +94,9 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 檢查目前時間：`timedatectl`
 
 ### 安裝基本系統
-1. 安裝基礎系統：`pacstrap /mnt base base-devel`
-2. 假如有 Wi-Fi 硬體，需要多執行這條指令：`pacstrap /mnt iw dialog wpa_supplicant wpa_actiond dhcpcd`
+1. 一般使用者 (包含 Wi-Fi 使用者)：`pacstrap /mnt base base-devel`
+2. 假如有 Wi-Fi 硬體，且需要使用 netctl，\
+需要多執行這條指令：`pacstrap /mnt iw dialog wpa_supplicant wpa_actiond dhcpcd`
 3. 為系統生成 fstab，讓系統準確的知道每個分割區的位置：\
    `genfstab -U /mnt >/mnt/etc/fstab`
 4. 進入基礎系統：`arch-chroot /mnt`
@@ -106,6 +107,12 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 而 UUID 比較不會發生什麼相容性問題
 
 ### 基本系統設定
+#### 切換內核到 linux-lts 與安裝微碼(建議)
+1. 安裝 linux-lts：`sudo pacman -S linux-lts`
+2. 安裝 Intel 的微碼：`sudo pacman -S intel-ucode`\
+   安裝 AMD 的微碼：`sudo pacman -S linux-firmware`
+3. 移除 linux 原核心：`sudo pacman -Rs linux`
+
 #### 時間設定
 1. 設定時區
 ```
@@ -161,25 +168,27 @@ UEFI + **GPT** 環境：
    -m 建立 (使用者名稱) 的家目錄\
    -s 設定 (使用者名稱) 的 Shell
 2. 設定使用者密碼：`passwd (使用者名稱)`
+3. 加入使用者至 wheel (管理員) 群組：`gpasswd -a (使用者名稱) wheel`
 
-#### 設定使用者的 sudo 權限
+#### 開放管理員 (wheel) 使用 sudo 權限
+讓加入 wheel 群組的使用者能使用 sudo 這個指令。
+
 1. 開啟 sudoers - sudo 的設定檔：`sudo nano /etc/sudoers`
 2. 找到以下部份：
 ```
-##
-## User privilege specification
-##
+## Uncomment to allow members of group wheel to execute any command
+
 ```
-3. 在 `root ALL=(ALL) ALL` 的下一行增加\
-   `(使用者名稱) ALL=(ALL) ALL` 即可。
+3. 將 `# %wheel ALL=(ALL) ALL` 取消註解為 `%wheel ALL=(ALL) ALL` 即可。
 
 外部連結：[ArchWiki 的 sudo 條目](https://wiki.archlinux.org/index.php/Sudo)
 
-#### NetworkManager 安裝 (選用)
-> 選用，使用有線網路者可以不用安裝，使用
-Wi-Fi 網路者建議安裝。
+#### NetworkManager 安裝
+> 假如你打算使用 netctl 管理網路，請跳過這個部份。
 1. 安裝 NetworkManager：`sudo pacman -Sy networkmanager`
 2. 啟用 NetworkManager：`sudo systemctl enable NetworkManager`
+3. 移除掉 netctl 與 dhcpcd 無用元件\
+   以節省系統空間：`sudo pacman -Rcnsu netctl dhcpcd`
 
 #### 桌面環境安裝 (選用)
 > xorg 是每個桌面環境的底層基礎，少了
