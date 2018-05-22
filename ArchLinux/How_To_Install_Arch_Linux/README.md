@@ -275,14 +275,15 @@ XMODIFIERS=@im=fcitx
 Arch Linux 比較常用的最佳化。
 
 #### 解決關機過久的問題
-1. 開啟 `/etc/systemd/user.conf` 檔案。（須 root 權限）
+1. 開啟 `/etc/systemd/user.conf` 與\
+`/etc/systemd/system.conf` 兩個檔案。（須 root 權限）
 2. 取消註解 (#) 以下兩行：
 ```
 # DefaultTimeoutStartSec=180s
 # DefaultTimeoutStopSec=180s
 ```
-3. 將以上兩行的 180s 改成 1s，未來碰到程式卡住無法關機的問題，systemd 也就只會等待一秒鐘就強制結束這個程式了。
-> 可以把 1s 改成其他數字，例如 5s 就是五秒、10s 就是十秒…
+3. 將以上兩行的 180s 改成 3s，未來碰到程式卡住無法關機的問題，systemd 也就只會等待三秒鐘就強制結束這個程式了。
+> 可以把 3s 改成其他數字，例如 5s 就是五秒、10s 就是十秒…
 4. 儲存檔案，執行 `systemctl daemon-reload` 即設定生效。
 ---
 
