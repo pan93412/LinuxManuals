@@ -82,8 +82,9 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 
 如果是 UEFI 使用者，還需要掛載 EFI 開機分區。
 
-1. 建立 /mnt/boot 資料夾，以掛載 EFI 開機分區至此處：`mkdir /mnt/boot`
-2. 掛載 EFI 開機分區 (通常為 /dev/sda1)：`mount /dev/sda1 /mnt/boot`
+1. 建立 /mnt/boot 資料夾：`mkdir /mnt/boot`
+2. 建立 /mnt/boot/efi 資料夾，以掛載 EFI 開機分區至此處：`mkdir /mnt/boot/efi` 
+3. 掛載 EFI 開機分區 (通常為 /dev/sda1)：`mount /dev/sda1 /mnt/boot/efi`
 
 ### LiveCD 網路與時間設定
 請避免使用 Wi-Fi 連線！
@@ -158,8 +159,12 @@ UEFI + **GPT** 環境：
 > 此方法只支援 GPT 分區！
 
 1. 安裝 GRUB 主程式與 UEFI 開機控制系統：`pacman -Sy grub efibootmgr dosfstools`
-2. 安裝 GRUB 開機管理程式：`grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub --recheck`
+2. 安裝 GRUB 開機管理程式：`grub-install --target=x86_64-efi --efi-directory=/boot/efi --boot-directory=/boot --bootloader-id=archgrub --recheck`
 3. 建立 GRUB 設定檔：`grub-mkconfig -o /boot/grub/grub.cfg`
+
+> bootloader-id 使用純英文與數字；你可以使用任何你喜歡的名稱。
+
+> target 可加可不加，但保險起見建議增加。
 
 外部連結：[ArchWiki 的 GRUB 條目](https://wiki.archlinux.org/index.php/GRUB)
 
