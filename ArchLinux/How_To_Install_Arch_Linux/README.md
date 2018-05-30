@@ -292,6 +292,14 @@ Arch Linux 比較常用的最佳化。
    DefaultTimeoutStopSec 改成 15s 即可。
 
 > 可以自由設定，但建議不要設得比以上的還短。
+
+#### 停用 NetworkManager 的 Wi-Fi 電源管理
+1. 建立 /etc/NetworkManager/conf.d/wifi-powersave.conf 並開啟
+2. 輸入以下幾行，儲存後即可。
+```
+[connection]
+wifi.powersave = 2
+```
 ---
 
 ### 進階使用
