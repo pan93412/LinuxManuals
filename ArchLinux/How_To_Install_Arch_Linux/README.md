@@ -300,6 +300,11 @@ Arch Linux 比較常用的最佳化。
 [connection]
 wifi.powersave = 2
 ```
+
+#### 安裝解碼器
+安裝 gst-plugins-good、gst-plugins-bad 與 gst-plugins-ugly 
+即可應付大多數的影片格式。
+
 ---
 
 ### 進階使用
