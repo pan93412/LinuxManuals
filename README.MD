@@ -2,6 +2,7 @@
 ## 目錄
 - Arch Linux
   - [如何安裝 Arch Linux？](https://github.com/pan93412/LinuxManuals/blob/master/ArchLinux/How_To_Install_Arch_Linux/README.md)
+  - [Arch Linux 個人優化](https://github.com/pan93412/LinuxManuals/blob/master/ArchLinux/Arch-Linux-Optimize/README.md)
   
 ## 作者
 | 作者名稱     | 作者聯絡方式             | 身份       |

@@ -218,6 +218,7 @@ sudo pacman -Sy xf86-video-intel`
 - noto-fonts-emoji：思源黑體 (Emoji) (推薦)
 - wqy-microhei
 - wqy-zenhei
+
 ##### KDE
 ```
 # 安裝 plasma（KDE 底層框架）與 kde-applications、sddm（KDE 推薦的登入管理器）
@@ -229,6 +230,18 @@ sudo systemctl enable sddm
 你懂 KDE 每個程式的用途，你可以選擇手動選擇安裝。
 
 外部連結：[ArchWiki 的 KDE 條目](https://wiki.archlinux.org/index.php/KDE)
+
+##### MATE
+```
+# 安裝 lightdm、lightdm-gtk-greeter (MATE 推薦的登入管理器) 和 mate、mate-extra
+sudo pacman -Syu mate mate-extra lightdm lightdm-gtk-greeter
+# 安裝 pulseaudio 與 libcanberra-pulse 音效管理程式
+sudo pacman -S pulseaudio libcanberra-pulse
+# 啟用 lightdm 登入管理器
+sudo systemctl enable lightdm
+```
+
+外部連結：[ArchWiki 的 MATE 條目](https://wiki.archlinux.org/index.php/MATE)
 
 #### 安裝輸入法
 ##### fcitx
@@ -292,14 +305,6 @@ Arch Linux 比較常用的最佳化。
    DefaultTimeoutStopSec 改成 15s 即可。
 
 > 可以自由設定，但建議不要設得比以上的還短。
-
-#### 停用 NetworkManager 的 Wi-Fi 電源管理
-1. 建立 /etc/NetworkManager/conf.d/wifi-powersave.conf 並開啟
-2. 輸入以下幾行，儲存後即可。
-```
-[connection]
-wifi.powersave = 2
-```
 
 #### 安裝解碼器
 安裝 gst-plugins-good、gst-plugins-bad 與 gst-plugins-ugly 
