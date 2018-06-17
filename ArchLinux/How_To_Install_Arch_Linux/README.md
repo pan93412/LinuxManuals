@@ -108,7 +108,7 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 而 UUID 比較不會發生什麼相容性問題
 
 ### 基本系統設定
-#### 切換內核到 linux-lts 與安裝微碼(建議)
+#### 切換內核到 linux-lts 與安裝微碼 (建議)
 1. 安裝 linux-lts：`sudo pacman -S linux-lts`
 2. 安裝 Intel 的微碼：`sudo pacman -S intel-ucode`\
    安裝 AMD 的微碼：`sudo pacman -S linux-firmware`
@@ -190,6 +190,7 @@ UEFI + **GPT** 環境：
 
 #### NetworkManager 安裝
 > 假如你打算使用 netctl 管理網路，請跳過這個部份。
+
 1. 安裝 NetworkManager：`sudo pacman -Sy networkmanager`
 2. 啟用 NetworkManager：`sudo systemctl enable NetworkManager`
 3. 移除掉 netctl 與 dhcpcd 無用元件\
@@ -248,6 +249,8 @@ sudo systemctl enable lightdm
 sudo pacman -Syu gnome gnome-extra
 # 啟用 gdm 登入管理器
 sudo systemctl enable gdm
+# 若要使用 gnome-software，需要安裝 gnome 的 packagekit 元件
+sudo pacman -Syu gnome-software-packagekit-plugin
 ```
 
 外部連結：[ArchWiki 的 MATE 條目](https://wiki.archlinux.org/index.php/MATE)
