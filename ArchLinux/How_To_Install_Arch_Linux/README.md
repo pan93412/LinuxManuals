@@ -215,11 +215,15 @@ sudo pacman -Sy xf86-video-intel`
 外部連結：[ArchWiki 的 Xorg 條目](https://wiki.archlinux.org/index.php/Xorg)
 
 ##### 字體
-- noto-fonts-cjk：思源黑體 (中日韓字體) (推薦)
-- `sudo pacman -Syu $(sudo pacman -Ssq ttf-)`：安裝英文與中文字體（推薦）
-- noto-fonts-emoji：思源黑體 (Emoji)
-- wqy-microhei
-- wqy-zenhei
+- noto-fonts：思源字體（含黑體與宋體）
+- noto-fonts-cjk：思源字體 (中日韓字體) (推薦)
+- noto-fonts-emoji：思源字體 (Emoji)
+- noto-fonts-extra：思源字體延伸
+- wqy-microhei：文泉驛微米黑
+- wqy-zenhei：文泉驛正黑體
+- ttf-dejavu：DejaVu 英文等寬字體
+- ttf-croscore：Chrome OS 字體
+- ttf-ubuntu-font-family：Ubuntu 字體
 
 ##### KDE
 ```
