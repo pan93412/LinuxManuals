@@ -215,10 +215,10 @@ sudo pacman -Sy xf86-video-intel`
 
 ##### 字體
 - noto-fonts-cjk：思源黑體 (中日韓字體) (推薦)
-- noto-fonts-emoji：思源黑體 (Emoji) (推薦)
+- `sudo pacman -Syu $(sudo pacman -Ssq ttf-)`：安裝英文與中文字體（推薦）
+- noto-fonts-emoji：思源黑體 (Emoji)
 - wqy-microhei
 - wqy-zenhei
-- `sudo pacman -Syu $(sudo pacman -Ssq ttf-)`：快速安裝英文與中文字體（推薦）
 
 ##### KDE
 ```
