@@ -218,6 +218,7 @@ sudo pacman -Sy xf86-video-intel`
 - noto-fonts-emoji：思源黑體 (Emoji) (推薦)
 - wqy-microhei
 - wqy-zenhei
+- `sudo pacman -Syu $(sudo pacman -Ssq ttf-)`：快速安裝英文與中文字體（推薦）
 
 ##### KDE
 ```
@@ -239,6 +240,14 @@ sudo pacman -Syu mate mate-extra lightdm lightdm-gtk-greeter
 sudo pacman -S pulseaudio libcanberra-pulse
 # 啟用 lightdm 登入管理器
 sudo systemctl enable lightdm
+```
+
+##### GNOME
+```
+# 安裝 gnome、gnome-extra
+sudo pacman -Syu gnome gnome-extra
+# 啟用 gdm 登入管理器
+sudo systemctl enable gdm
 ```
 
 外部連結：[ArchWiki 的 MATE 條目](https://wiki.archlinux.org/index.php/MATE)
