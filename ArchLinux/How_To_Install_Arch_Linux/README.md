@@ -1,14 +1,9 @@
-# 如何安裝 Arch Linux？
+# Arch Linux 安裝手冊
 ## 說明
-有些人會以為 Arch Linux 十分困難、超級難安裝、
-非常恐怖，\
-但事實沒有這麼恐怖，頂多比 Debian
-的安裝程式還要複雜一點點而已。
+這是一本 Arch Linux 安裝手冊，願新手與老手皆能快速\
+上手安裝 Arch Linux。
 
-本教學會引導你學會安裝 Arch Linux，在其中你\
-可以感受到安裝 Arch Linux 的自訂性與 DIY 的成就感。
-
-這是一本面向 Arch Linux 初心者的安裝說明書。
+此安裝手冊隨時更新，但通常更新的內容無關緊要。
 
 ## 準備
 -  **有一定的電腦、Linux 基礎**
@@ -66,6 +61,8 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 
 其實比較建議在安裝前就處理好。
 
+> 可使用的另外一個指令：`fdisk`，個人覺得這比較好上手。
+
 #### 格式化分割區
 1. 查詢自己想要格式化的分割區：`lsblk -f`
 2. 格式化分割區：`mkfs.ext4 /dev/sd(磁碟編號)(分割區編號)`\
@@ -82,9 +79,8 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 
 如果是 UEFI 使用者，還需要掛載 EFI 開機分區。
 
-1. 建立 /mnt/boot 資料夾：`mkdir /mnt/boot`
-2. 建立 /mnt/boot/efi 資料夾，以掛載 EFI 開機分區至此處：`mkdir /mnt/boot/efi` 
-3. 掛載 EFI 開機分區 (通常為 /dev/sda1)：`mount /dev/sda1 /mnt/boot/efi`
+1. 建立 /mnt/boot/efi 資料夾，以掛載 EFI 開機分區至此處：`mkdir -p /mnt/boot/efi` 
+2. 掛載 EFI 開機分區 (通常為 /dev/sda1)：`mount /dev/sda1 /mnt/boot/efi`
 
 ### LiveCD 網路與時間設定
 請避免使用 Wi-Fi 連線！
@@ -96,8 +92,8 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 
 ### 安裝基本系統
 1. 一般使用者 (包含 Wi-Fi 使用者)：`pacstrap /mnt base base-devel`
-2. 假如有 Wi-Fi 硬體，且需要使用 netctl，\
-需要多執行這條指令：`pacstrap /mnt iw dialog wpa_supplicant wpa_actiond dhcpcd`
+2. 假如有 Wi-Fi 硬體，需要多執行這條指令：\
+   `pacstrap /mnt iw dialog wpa_supplicant wpa_actiond`
 3. 為系統生成 fstab，讓系統準確的知道每個分割區的位置：\
    `genfstab -U /mnt >/mnt/etc/fstab`
 4. 進入基礎系統：`arch-chroot /mnt`
@@ -109,12 +105,19 @@ dd if=ISO 位置 of=/dev/USB 磁碟區 bs=4M
 
 ### 基本系統設定
 #### 切換內核到 linux-lts 與安裝微碼 (建議)
+Linux 的 LTS 版本較正常版本穩定，因其只接受安全性補丁，
+而不接受功能更新。
+
+微碼則是更新 CPU 的指令集。
+
 1. 安裝 linux-lts：`sudo pacman -S linux-lts`
 2. 安裝 Intel 的微碼：`sudo pacman -S intel-ucode`\
    安裝 AMD 的微碼：`sudo pacman -S linux-firmware`
 3. 移除 linux 原核心：`sudo pacman -Rs linux`
 
 #### 時間設定
+進行對時與時區設定。
+
 1. 設定時區
 ```
 # 例如台灣的時區設定檔就在 /usr/share/zoneinfo/Asia/Taiwan
@@ -124,6 +127,8 @@ ln -sf /usr/share/zoneinfo/Asia/Taiwan /etc/localtime
 2. 將系統時間設定為 UTC：`hwclock -w --utc`
 
 #### 語系設定
+設定為中文語系。如果不打算安裝 Xorg，此步驟請省略。
+
 1. 開啟 /etc/locale.gen：`nano /etc/locale.gen`
 2. 解除註解 (#) 以下：
 ```
@@ -140,13 +145,17 @@ LANGUAGE=zh_TW
 ```
 
 #### 主機名稱
+與外部電腦聯絡的識別名稱。
+
 主機名稱取名規則：可亂取、但不要取中文、也不要取有特殊\
 符號的主機名稱。且建議取英文字母為第一個字！設定指令：\
 `echo "想要的主機名稱" >/etc/hostname`
 
 #### GRUB 安裝
+GRUB 是一個開機管理程式，與 Windows Boot Manager 同類型，但更強大。
+
 > 假如你打算 Windows + Linux 雙系統，請多安裝 os-prober，\
-待進入桌面環境後再輸入 `grub-mkconfig` 就能取得其他系統的開機項。[待測試]
+待進入桌面環境後再輸入 `grub-mkconfig` 就能取得其他系統的開機項。
 
 BIOS + MBR 環境：
 1. 安裝 GRUB 主程式：`pacman -Sy grub`
@@ -167,6 +176,11 @@ UEFI + **GPT** 環境：
 > target 可加可不加，但保險起見建議增加。
 
 外部連結：[ArchWiki 的 GRUB 條目](https://wiki.archlinux.org/index.php/GRUB)
+
+#### 設定管理員密碼
+防止被有心人士取得 root 帳號權限。
+
+執行 `passwd root` 修改 root 帳號的密碼。
 
 #### 使用者建立
 1. 建立使用者：`useradd -m -s /bin/bash (使用者名稱)`\
@@ -215,13 +229,17 @@ sudo pacman -Sy xf86-video-intel`
 外部連結：[ArchWiki 的 Xorg 條目](https://wiki.archlinux.org/index.php/Xorg)
 
 ##### 字體
-- noto-fonts：思源字體（含黑體與宋體）
-- noto-fonts-cjk：思源字體 (中日韓字體) (推薦)
-- noto-fonts-emoji：思源字體 (Emoji)
-- noto-fonts-extra：思源字體延伸
-- wqy-microhei：文泉驛微米黑
-- wqy-zenhei：文泉驛正黑體
-- ttf-dejavu：DejaVu 英文等寬字體
+- `sudo pacman -Sy $(pacman -Ssq noto-fonts)`：思源字體全系列 (推薦)
+	- noto-fonts：思源字體（含黑體與宋體）
+	- noto-fonts-cjk：思源字體 (中日韓字體)
+	- noto-fonts-emoji：思源字體 (Emoji)
+	- noto-fonts-extra：思源字體延伸
+- `sudo pacman -Sy $(pacman -Ssq wqy-)` ：文泉驛全系列（推薦）
+	- wqy-microhei：文泉驛微米黑
+	- wqy-microhei-lite：文泉驛微米黑（細）
+	- wqy-zenhei：文泉驛正黑體
+	- wqy-bitmapfont：文泉驛點陣字體
+- ttf-bitstream-vera：Bitstream Vera 英文等寬字體（推薦）
 - ttf-croscore：Chrome OS 字體
 - ttf-ubuntu-font-family：Ubuntu 字體
 
@@ -276,13 +294,31 @@ XMODIFIERS=@im=fcitx
 
 > 只能使用 .pam_environment，這是英文版 ArchWiki
 提供的方法。
->> .xprofile 或者其他在 KDE 或大多數桌面環境
-可能不起作用。
+>> .xprofile 或者其他 x 開頭檔案，可能在 KDE 或大多數
+桌面環境可能不起作用。
 
 > 請安裝 fcitx-im，不要單獨安裝 fcitx，因為 fcitx-im 
 包含了給 GTK 與 QT 的輸入法 lib。
 
 外部連結：[ArchWiki 的 fcitx 條目](https://wiki.archlinux.org/index.php/Fcitx)
+
+##### ibus
+1. 安裝 ibus 框架與 chewing 新酷音：`sudo pacman -Sy ibus ibus-chewing` 
+2. 進入自己的使用者，以進行接下來的步驟：`su 使用者名稱`
+3. 建立 ~/.pam_environment 檔案：`touch ~/.pam_environment`
+4. 開啟 ~/.pam_environment 檔案：`nano ~/.pam_environment`
+5. 增加下列幾行至 ~/.pam_environment
+   ```
+   GTK_IM_MODULE=ibus
+   QT_IM_MODULE=ibus
+   XMODIFIERS=@im=ibus
+   ```
+6. 儲存檔案，輸入 exit 回到 root 使用者
+
+> 只能使用 .pam_environment，這是英文版 ArchWiki
+提供的方法。
+>> .xprofile 或者其他 x 開頭檔案，可能在 GNOME 或大多數
+桌面環境可能不起作用。
 
 #### 安裝常用軟體 (選用)
 - ntfs-3g：讀取與寫入 NTFS 格式的磁碟
@@ -325,6 +361,8 @@ Arch Linux 比較常用的最佳化。
 #### 安裝解碼器
 安裝 gst-plugins-good、gst-plugins-bad 與 gst-plugins-ugly 
 即可應付大多數的影片格式。
+
+快速安裝：`sudo pacman -Sy $(sudo pacman -Ssq gst-plugins-)`
 
 ---
 
